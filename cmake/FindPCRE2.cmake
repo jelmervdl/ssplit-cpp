@@ -35,13 +35,18 @@ if(SSPLIT_USE_INTERNAL_PCRE2)
   else()
     set(PCRE2_JIT_OPTION  "-DPCRE2_SUPPORT_JIT=ON")
   endif()
+
+  # emscripten > 3.0.0's cross compiler is `node` plus some flags. When left
+  # alone, these are passed down the shells joined by `;` which is seen as list
+  # separator. Passing them as an escaped space seems to keep them as one item.
+  string(REPLACE ";" "\\\\ " ESCAPED_CMAKE_CROSSCOMPILING_EMULATOR "${CMAKE_CROSSCOMPILING_EMULATOR}")
   set(PCRE2_CONFIGURE_OPTIONS
     -DBUILD_SHARED_LIBS=OFF
     -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}
     -DCMAKE_BUILD_TYPE=Release
     ${PCRE2_JIT_OPTION}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} # Necessary for proper MacOS compilation
-    -DCMAKE_CROSSCOMPILING_EMULATOR=${CMAKE_CROSSCOMPILING_EMULATOR} # Necessary for proper MacOS compilation
+    -DCMAKE_CROSSCOMPILING_EMULATOR=${ESCAPED_CMAKE_CROSSCOMPILING_EMULATOR} # Necessary for proper MacOS compilation
     -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true # Added for pybind11
     )
 
