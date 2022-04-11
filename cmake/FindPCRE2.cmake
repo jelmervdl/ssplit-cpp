@@ -35,6 +35,13 @@ if(SSPLIT_USE_INTERNAL_PCRE2)
   else()
     set(PCRE2_JIT_OPTION  "-DPCRE2_SUPPORT_JIT=ON")
   endif()
+
+  # CMAKE_CROSSCOMPILING_EMULATOR might contain semicolon (;) separated arguments. Preventing list
+  # expansion on the arguments of this variable before adding it to PCRE2_CONFIGURE_OPTIONS
+  # by replacing semicolon with $<SEMICOLON> as per:
+  # https://cmake.org/cmake/help/git-stage/manual/cmake-generator-expressions.7.html#genex:SEMICOLON
+  string(REPLACE ";" "$<SEMICOLON>" CMAKE_CROSSCOMPILING_EMULATOR_WITH_SEMICOLON "${CMAKE_CROSSCOMPILING_EMULATOR}")
+
   set(PCRE2_CONFIGURE_OPTIONS
     -DBUILD_SHARED_LIBS=OFF
     -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}
@@ -42,7 +49,7 @@ if(SSPLIT_USE_INTERNAL_PCRE2)
     -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR}
     ${PCRE2_JIT_OPTION}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} # Necessary for proper MacOS compilation
-    -DCMAKE_CROSSCOMPILING_EMULATOR=${CMAKE_CROSSCOMPILING_EMULATOR} # Necessary for proper MacOS compilation
+    -DCMAKE_CROSSCOMPILING_EMULATOR=${CMAKE_CROSSCOMPILING_EMULATOR_WITH_SEMICOLON} # Necessary for proper MacOS compilation
     -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true # Added for pybind11
     )
 
