@@ -12,7 +12,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: mymindstorm/setup-emsdk@v9
+    - uses: mymindstorm/setup-emsdk@v11
+      with:
+          version: 3.1.8
     - name: build
       run: |
         emcmake cmake -E make_directory build
