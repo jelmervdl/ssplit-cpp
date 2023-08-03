@@ -138,9 +138,9 @@ operator()(string_view* rest) const {
   // Regarding \p{Xan} below, see
   // https://www.pcre.org/current/doc/html/pcre2syntax.html#SEC6
   static Regex Chunker_RE("\\s*" // whitespace
-                          "[^.?!]*?" // non alphanumeric stuff
-                          "(\\p{Xan}*)" // alphanumeric prefix of potential EOS marker
-                          "([.?!]++)" // the potential EOS marker
+                          "[^.?!։]*?" // non alphanumeric stuff
+                          "([\\p{L}\\p{N}]*)" // alphanumeric prefix of potential EOS marker
+                          "([.?!։]++)" // the potential EOS marker
                           "(" // open group for trailing matter
                           "['\")\\]’”\\p{Pf}]*" // any "trailing matter"
                           "(?:\\[[\\p{Nd}]+[\\p{Nd},\\s]*[\\p{Nd}]\\])?" // footnote?
