@@ -134,9 +134,6 @@ operator()(string_view* rest) const {
 
   // The chunker is the first step in sentence splitting.
   // It identifies candidate split points.
-  //
-  // Regarding \p{Xan} below, see
-  // https://www.pcre.org/current/doc/html/pcre2syntax.html#SEC6
   static Regex Chunker_RE("\\s*" // whitespace
                           "[^.?!։]*?" // non alphanumeric stuff
                           "([\\p{L}\\p{N}]*)" // alphanumeric prefix of potential EOS marker
